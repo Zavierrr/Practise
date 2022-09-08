@@ -1,0 +1,51 @@
+{
+  "id": "3473084",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1727457",
+      "name": "223保存",
+      "font_class": "baocun",
+      "unicode": "e8c8",
+      "unicode_decimal": 59592
+    },
+    {
+      "icon_id": "3978412",
+      "name": "清空",
+      "font_class": "qingkong",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "7274110",
+      "name": "预览",
+      "font_class": "yulan",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "5651503",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "14234527",
+      "name": "图表",
+      "font_class": "tubiao-01",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "16542937",
+      "name": "富文本编辑器_字体颜色",
+      "font_class": "fuwenbenbianjiqi_zitiyanse",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    }
+  ]
+}
