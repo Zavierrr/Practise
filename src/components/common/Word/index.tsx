@@ -5,16 +5,15 @@ import { Wrapper } from "./style";
 interface WordPropsType {
   title: string;
   content: string;
-  type: string;
 }
 
 const Word: React.FC<WordPropsType> = (props) => {
-  const { title, content,type } = props;
+  const { title, content } = props;
 
   return (
-    <Wrapper type={type}>
-      <span>{title}</span>
-      <span>{content}</span>
+    <Wrapper>
+      <span>{title || '标题一9'}</span>
+      <span>{content || ''}</span>
     </Wrapper>
   );
 };

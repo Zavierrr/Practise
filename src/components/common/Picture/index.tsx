@@ -4,14 +4,13 @@ import { Wrapper } from "./style";
 
 interface PicturePropsType {
   picUrl: string;
-  type: string;
 }
 
 const Picture: React.FC<PicturePropsType> = (props) => {
-  const { picUrl,type } = props;
+  const { picUrl } = props;
 
   return (
-    <Wrapper type={type}>
+    <Wrapper>
       <img src={picUrl} alt="" />
     </Wrapper>
   );

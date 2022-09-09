@@ -1,36 +1,26 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Wrapper } from "./style";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { connect } from "react-redux";
-import {
-  changeChartData,
-  changePicUrl,
-  changeText,
-  changeType,
-} from "@/store/action-creators/total";
+import { changeDataList } from "@/store/action-creators/total";
 import { Dispatch } from "redux";
 import { rootState } from "@/store";
-import { Chart, textObject,initalChart } from "@/models/total";
-import Charts from "../common/Charts";
+import { DataListType, InitialChart } from "@/config/global.types";
+import Charts from "../Common/Charts";
 
 interface RightPropsType {
+  dataList: DataListType[];
+  initialChartData: InitialChart;
   type: string;
-  picUrl: string[];
-  text: textObject[];
-  chartData: Chart[];
-  initalChartData: initalChart
-  typeDispatch: (data: string) => void;
-  picUrlDispatch: (data: string) => void;
-  textDispatch: (data: object) => void;
-  chartDataDispatch: (data: object) => void;
+  dataListDispatch: (data: DataListType[]) => void;
 }
 
 const Right: React.FC<RightPropsType> = (props) => {
-  const { type, picUrl, text, chartData,initalChartData } = props;
-  const { typeDispatch, picUrlDispatch, textDispatch, chartDataDispatch } =
-    props;
+  const { dataList, initialChartData, type } = props;
+  const { dataListDispatch } = props;
   const [val, setVal] = useState("");
+  useEffect(() => {}, []);
   const modules = {
     toolbar: {
       container: [
@@ -59,14 +49,16 @@ const Right: React.FC<RightPropsType> = (props) => {
 
   return (
     <Wrapper type={type}>
-      <div className="edit_Title">
-        {type === "word"
-          ? "文本编辑"
+      <div className="edit-title">
+        {type === "chart"
+          ? "图表编辑（切换类型）"
           : type === "picture"
           ? "图片编辑"
-          : "图表编辑（切换类型）"}
+          : "文本编辑"}
       </div>
-      <div className="text_Edit">
+
+      {/* 文本编辑 */}
+      <div className="text-edit">
         <ReactQuill
           theme="snow"
           placeholder="Please Input"
@@ -75,49 +67,40 @@ const Right: React.FC<RightPropsType> = (props) => {
         />
       </div>
 
-      <div className="pic_Edit">
-        <label htmlFor="pic_Url" className="pic_label">
+      {/* 图片地址编辑 */}
+      <div className="pic-edit">
+        <label htmlFor="pic-url" className="pic-label">
           图片地址：
         </label>
         <input
           type="text"
-          id="pic_Url"
+          id="pic-url"
           value={val}
           onChange={valChange}
           placeholder="请输入图片地址"
           required
         />
       </div>
-      <div className="chart_Edit">
+
+      {/* 图表选择 */}
+      <div className="chart-edit">
         <Charts
-          title={initalChartData.title}
-          xData={initalChartData.xData}
-          yData={initalChartData.yData}
-          name={initalChartData.desc}
-          data={initalChartData.data}
-          EType='bar'
-          type=''
-          style={{ width: "300px", height: "240px" }}
+          title={initialChartData.title}
+          EType="bar"
+          dataSet={initialChartData.dataSet}
+          style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
         <Charts
-          title={initalChartData.title}
-          xData={initalChartData.xData}
-          yData={initalChartData.yData}
-          name={initalChartData.desc}
-          data={initalChartData.data}
-          EType='pie'
-          type=''
-          style={{ width: "300px", height: "240px" }}
+          title={initialChartData.title}
+          EType="pie"
+          dataSet={initialChartData.dataSet}
+          style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
         <Charts
-          title={initalChartData.title}
-          xData={initalChartData.xData}
-          yData={initalChartData.yData}
-          name={initalChartData.desc}
-          data={initalChartData.data}
-          EType='line'
-          type=''
-          style={{ width: "300px", height: "240px" }}
+          title={initialChartData.title}
+          EType="line"
+          dataSet={initialChartData.dataSet}
+          style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
       </div>
     </Wrapper>
@@ -125,25 +108,23 @@ const Right: React.FC<RightPropsType> = (props) => {
 };
 
 const mapStateToProps = (state: rootState) => ({
+  dataList: state.dataList,
+  initialChartData: state.initialChartData,
   type: state.type,
-  picUrl: state.picUrl,
-  text: state.text,
-  chartData: state.chartData,
-  initalChartData: state.initalChartData,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  typeDispatch(data: string) {
-    dispatch(changeType(data));
-  },
-  picUrlDispatch(data: string) {
-    dispatch(changePicUrl(data));
-  },
-  textDispatch(data: object) {
-    dispatch(changeText(data));
-  },
-  chartDataDispatch(data: object) {
-    dispatch(changeChartData(data));
+  // typeDispatch(data: string) {
+  //   dispatch(changeType(data));
+  // },
+  // picUrlDispatch(data: string) {
+  //   dispatch(changePicUrl(data));
+  // },
+  // textDispatch(data: object) {
+  //   dispatch(changeText(data));
+  // },
+  dataListDispatch(data: object) {
+    dispatch(changeDataList(data));
   },
 });
 

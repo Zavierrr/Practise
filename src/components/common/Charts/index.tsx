@@ -1,21 +1,10 @@
 import * as echarts from "echarts";
 import { MutableRefObject, useEffect, useRef } from "react";
-import { ChartStyleType, pieData } from "@/models/total";
+import { ChartType } from "@/config/global.types";
 import { Wrapper } from "./style";
 
-export interface ChartsProps {
-  title: string;
-  xData: string[];
-  yData: number[];
-  EType: string;
-  style: ChartStyleType;
-  data: pieData[];
-  name: string;
-  type: string;
-}
-
-const Charts: React.FC<ChartsProps> = (props) => {
-  const { title, xData, yData, style, EType, data, name, type } = props;
+const Charts: React.FC<ChartType> = (props) => {
+  const { title, style, EType, dataSet } = props;
   const domRef: MutableRefObject<any> = useRef();
   var myChart: echarts.ECharts;
   const chartBarOrLineInit = () => {
@@ -32,15 +21,15 @@ const Charts: React.FC<ChartsProps> = (props) => {
         text: title,
       },
       tooltip: {},
-      xAxis: {
-        data: xData,
-      },
+      xAxis: {type: 'category'},
       yAxis: {},
+      dataset: {
+        dimensions: dataSet.dimensions,
+        source: dataSet.source,
+      },
       series: [
         {
-          name: name,
           type: EType,
-          data: yData,
           barWidth: "50%",
           smooth: true,
         },
@@ -55,11 +44,10 @@ const Charts: React.FC<ChartsProps> = (props) => {
       title: {
         text: title,
       },
+      dataset: dataSet,
       series: [
         {
-          name: name,
           type: EType,
-          data: data,
         },
       ],
     });
@@ -79,7 +67,7 @@ const Charts: React.FC<ChartsProps> = (props) => {
     }
   });
   return (
-    <Wrapper type={type}>
+    <Wrapper>
       {/* 准备一个挂载节点 */}
       <div ref={domRef} style={style}></div>
     </Wrapper>

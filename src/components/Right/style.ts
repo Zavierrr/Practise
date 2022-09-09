@@ -7,22 +7,23 @@ export const Wrapper = styled.div<{ type: string }>`
   background-color: #f7f9fc;
   box-shadow: 0px -1px 5px 1px rgba(0, 0, 0, 0.3);
   font-size: ${px2rem(12)};
-  .edit_Title {
+  .edit-title {
     display: block;
     padding: ${px2rem(10)} ${px2rem(10)};
     background-color: #fff;
     margin-bottom: ${px2rem(6)};
   }
-  .text_Edit {
-    display: ${(props) => (props.type === "word" ? "block" : "none")};
+  .text-edit {
+    display: ${(props) =>
+      props.type === "word" ? "block" : props.type === "" ? "block" : "none"};
   }
-  .pic_Edit {
+  .pic-edit {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     display: ${(props) => (props.type === "picture" ? "block" : "none")};
-    .pic_label::before {
+    .pic-label::before {
       content: "*";
       right: -10px;
       top: 0;
@@ -32,7 +33,7 @@ export const Wrapper = styled.div<{ type: string }>`
       width: 70%;
     }
   }
-  .chart_Edit {
+  .chart-edit {
     width: 100%;
     display: ${(props) => (props.type === "chart" ? "block" : "none")};
   }

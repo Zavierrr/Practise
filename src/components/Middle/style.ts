@@ -4,7 +4,7 @@ import { px2rem } from "@/assets/global-style";
 export const Wrapper = styled.div`
   flex: 4;
   padding: ${px2rem(10)} 0 ${px2rem(20)};
-  .middle_top {
+  .middle-top {
     display: flex;
     width: 70%;
     margin: ${px2rem(20)} auto;

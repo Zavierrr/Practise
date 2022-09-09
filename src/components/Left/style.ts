@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import {px2rem} from '@/assets/global-style'
+import styled from "styled-components";
+import { px2rem } from "@/assets/global-style";
 
 export const Wrapper = styled.div`
   flex: 2;
   background-color: #fafafa;
   height: 100vh;
   padding-top: 3rem;
-  div{
+  div {
     width: 3rem;
     display: flex;
     justify-content: space-between;
@@ -15,11 +15,14 @@ export const Wrapper = styled.div`
     padding: ${px2rem(10)} 0;
     font-size: ${px2rem(12)};
     color: #999;
-    span{
+    &:hover {
+      cursor: pointer;
+    }
+    span {
       display: inline-block;
     }
-    i{
+    i {
       font-size: ${px2rem(16)};
     }
   }
-`
+`;

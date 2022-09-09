@@ -4,29 +4,21 @@ import Content from "./Content";
 import { connect } from "react-redux";
 import { rootState } from "@/store";
 import { Dispatch } from "redux";
-import {
-  changePicUrl,
-  changeText,
-  changeChartData,
-  changeType,
-} from "@/store/action-creators/total";
-import { Chart, textObject } from "@/models/total";
+import { changeDataList } from "@/store/action-creators/total";
+import { DataListType } from "@/config/global.types";
 
 interface MiddlePropsType {
-  type: string;
-  picUrl: string[];
-  text: textObject[];
-  chartData: Chart[];
-  typeDispatch: (data: string) => void;
+  dataList: DataListType[];
+  dataListDispatch: (data: DataListType[]) => void;
 }
 
 const Middle: React.FC<MiddlePropsType> = (props) => {
-  const { type, picUrl, text, chartData } = props;
-  const { typeDispatch } = props;
+  const { dataList } = props;
+  const { dataListDispatch } = props;
 
   return (
     <Wrapper>
-      <div className="middle_top">
+      <div className="middle-top">
         <div>
           <i className="iconfont icon-yulan"></i>
           <span>预览</span>
@@ -41,37 +33,19 @@ const Middle: React.FC<MiddlePropsType> = (props) => {
         </div>
       </div>
       {/* 三种类型存放在 Content 组件内 */}
-      <Content
-        type={type}
-        picUrl={picUrl}
-        text={text}
-        chartData={chartData}
-        typeDispatch={typeDispatch}
-      />
+      <Content dataList={dataList} dataListDispatch={dataListDispatch} />
     </Wrapper>
   );
 };
 
 const mapStateToProps = (state: rootState) => ({
-  type: state.type,
-  picUrl: state.picUrl,
-  text: state.text,
-  chartData: state.chartData,
+  dataList: state.dataList,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  typeDispatch(data: string) {
-    dispatch(changeType(data));
+  dataListDispatch(data: DataListType[]) {
+    dispatch(changeDataList(data));
   },
-  // picUrlDispatch(data: string) {
-  //   dispatch(changePicUrl(data));
-  // },
-  // textDispatch(data: object) {
-  //   dispatch(changeText(data));
-  // },
-  // chartDataDispatch(data: object) {
-  //   dispatch(changeChartData(data));
-  // },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(memo(Middle));
