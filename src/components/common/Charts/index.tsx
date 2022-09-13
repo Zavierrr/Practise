@@ -4,24 +4,24 @@ import { ChartType } from "@/config/global.types";
 import { Wrapper } from "./style";
 
 const Charts: React.FC<ChartType> = (props) => {
-  const { title, style, EType, dataSet } = props;
+  const { title, style, eType, dataSet } = props;
   const domRef: MutableRefObject<any> = useRef();
-  var myChart: echarts.ECharts;
+  var myChart: any;
+
   const chartBarOrLineInit = () => {
     // 判断是否实例化
-    if (myChart != null && myChart != undefined) {
-      myChart.dispose();
-    }
+    myChart = echarts.getInstanceByDom(domRef.current);
     // 基于准备好的dom，初始化echarts实例
-    myChart = echarts.init(domRef.current);
-
+    if (!myChart) {
+      myChart = echarts.init(domRef.current);
+    }
     // 绘制图表
     myChart.setOption({
       title: {
         text: title,
       },
       tooltip: {},
-      xAxis: {type: 'category'},
+      xAxis: { type: "category" },
       yAxis: {},
       dataset: {
         dimensions: dataSet.dimensions,
@@ -29,16 +29,20 @@ const Charts: React.FC<ChartType> = (props) => {
       },
       series: [
         {
-          type: EType,
+          type: eType,
           barWidth: "50%",
           smooth: true,
         },
       ],
     });
   };
+
   const chartPieInit = () => {
+    myChart = echarts.getInstanceByDom(domRef.current);
     // 基于准备好的dom，初始化echarts实例
-    const myChart = echarts.init(domRef.current);
+    if (!myChart) {
+      myChart = echarts.init(domRef.current);
+    }
     // 绘制图表
     myChart.setOption({
       title: {
@@ -47,14 +51,14 @@ const Charts: React.FC<ChartType> = (props) => {
       dataset: dataSet,
       series: [
         {
-          type: EType,
+          type: eType,
         },
       ],
     });
   };
 
   useEffect(() => {
-    switch (EType) {
+    switch (eType) {
       case "bar":
         chartBarOrLineInit();
         break;
@@ -66,8 +70,9 @@ const Charts: React.FC<ChartType> = (props) => {
         break;
     }
   });
+
   return (
-    <Wrapper>
+    <Wrapper >
       {/* 准备一个挂载节点 */}
       <div ref={domRef} style={style}></div>
     </Wrapper>

@@ -12,8 +12,8 @@ const Word: React.FC<WordPropsType> = (props) => {
 
   return (
     <Wrapper>
-      <span>{title || '标题一9'}</span>
-      <span>{content || ''}</span>
+      <span>{title}</span>
+      <span>{content}</span>
     </Wrapper>
   );
 };

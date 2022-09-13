@@ -15,7 +15,7 @@ const initialState = {
       picUrl: "",
       chartData: {
         title: "",
-        EType: "",
+        eType: "",
         dataSet: {
           dimensions: [],
           source: [],
@@ -33,7 +33,7 @@ const initialState = {
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1665040940&t=16e2e59b65ff62a1177c05c01f672e94",
       chartData: {
         title: "",
-        EType: "",
+        eType: "",
         dataSet: {
           dimensions: [],
           source: [],
@@ -50,12 +50,7 @@ const initialState = {
       picUrl: "",
       chartData: {
         title: "主流框架的满意度",
-        EType: "bar",
-        style: {
-          width: "",
-          height: "",
-          margin: "",
-        },
+        eType: "bar",
         dataSet: {
           dimensions: ["frame", "like"],
           source: [
@@ -69,7 +64,7 @@ const initialState = {
   ],
   initialChartData: {
     title: "xxx",
-    // EType: "",
+    // eType: "",
     dataSet: {
       dimensions: ["month", "sales"],
       source: [
@@ -86,17 +81,17 @@ const initialState = {
 const dataListReducer = (state = initialState.dataList, action: AnyAction) => {
   switch (action.type) {
     case actionTypes.SET_DATALIST:
-      return {
-        ...state,
-        dataList: action.data,
-      };
+      return state.concat(action.data);
+    case actionTypes.GET_DATA_LIST:
+      state = action.data;
+      return state;
     default:
       return state;
   }
 };
 const typeReducer = (state = initialState.type, action: AnyAction) => {
   switch (action.type) {
-    case actionTypes.SET_DATALIST:
+    case actionTypes.SET_TYPE:
       return action.data;
     default:
       return state;

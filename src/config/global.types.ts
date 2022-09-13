@@ -29,7 +29,7 @@ export interface DataListType {
 // 图表数据类型
 export interface ChartType {
   title: string;
-  EType: string;
+  eType: string;
   dataSet: DataSet;
   style?: ChartStyleType;
 }

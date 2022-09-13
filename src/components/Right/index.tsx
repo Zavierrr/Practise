@@ -13,12 +13,12 @@ interface RightPropsType {
   dataList: DataListType[];
   initialChartData: InitialChart;
   type: string;
-  dataListDispatch: (data: DataListType[]) => void;
+  changeDataListDispatch: (data: DataListType) => void;
 }
 
 const Right: React.FC<RightPropsType> = (props) => {
   const { dataList, initialChartData, type } = props;
-  const { dataListDispatch } = props;
+  const { changeDataListDispatch } = props;
   const [val, setVal] = useState("");
   useEffect(() => {}, []);
   const modules = {
@@ -86,19 +86,19 @@ const Right: React.FC<RightPropsType> = (props) => {
       <div className="chart-edit">
         <Charts
           title={initialChartData.title}
-          EType="bar"
+          eType="bar"
           dataSet={initialChartData.dataSet}
           style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
         <Charts
           title={initialChartData.title}
-          EType="pie"
+          eType="pie"
           dataSet={initialChartData.dataSet}
           style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
         <Charts
           title={initialChartData.title}
-          EType="line"
+          eType="line"
           dataSet={initialChartData.dataSet}
           style={{ width: "360px", height: "280px", margin: "0 auto" }}
         />
@@ -114,16 +114,7 @@ const mapStateToProps = (state: rootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // typeDispatch(data: string) {
-  //   dispatch(changeType(data));
-  // },
-  // picUrlDispatch(data: string) {
-  //   dispatch(changePicUrl(data));
-  // },
-  // textDispatch(data: object) {
-  //   dispatch(changeText(data));
-  // },
-  dataListDispatch(data: object) {
+  changeDataListDispatch(data: DataListType) {
     dispatch(changeDataList(data));
   },
 });
