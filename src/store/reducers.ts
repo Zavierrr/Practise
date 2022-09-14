@@ -1,8 +1,10 @@
 import { combineReducers, AnyAction } from "redux";
 import * as actionTypes from "./action-types";
+import { cloneDeep } from "lodash";
 
 const initialState = {
   type: "text",
+  id: 0,
   dataList: [
     {
       id: 0,
@@ -64,7 +66,6 @@ const initialState = {
   ],
   initialChartData: {
     title: "xxx",
-    // eType: "",
     dataSet: {
       dimensions: ["month", "sales"],
       source: [
@@ -80,18 +81,34 @@ const initialState = {
 };
 const dataListReducer = (state = initialState.dataList, action: AnyAction) => {
   switch (action.type) {
+    // 添加数据
     case actionTypes.SET_DATALIST:
       return state.concat(action.data);
+    // 更新数据
     case actionTypes.GET_DATA_LIST:
       state = action.data;
       return state;
+    // 编辑数据
+    case actionTypes.EDIT_DATA_LIST:
+      state[action.data.id] = { ...action.data.content };
+      return cloneDeep(state);
     default:
       return state;
   }
 };
 const typeReducer = (state = initialState.type, action: AnyAction) => {
   switch (action.type) {
+    // 修改类型
     case actionTypes.SET_TYPE:
+      return action.data;
+    default:
+      return state;
+  }
+};
+const idReducer = (state = initialState.id, action: AnyAction) => {
+  switch (action.type) {
+    // 修改id
+    case actionTypes.SET_ID:
       return action.data;
     default:
       return state;
@@ -105,4 +122,5 @@ export default combineReducers({
   dataList: dataListReducer,
   initialChartData: initialChartDataReducer,
   type: typeReducer,
+  id: idReducer,
 });

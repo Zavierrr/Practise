@@ -1,8 +1,8 @@
 import * as echarts from "echarts";
-import { useEffect } from "react";
+import { HTMLAttributes, useEffect } from "react";
 import { Wrapper } from "./style";
 
-interface PicturePropsType {
+interface PicturePropsType extends HTMLAttributes<HTMLDivElement> {
   picUrl: string;
 }
 
@@ -10,7 +10,7 @@ const Picture: React.FC<PicturePropsType> = (props) => {
   const { picUrl } = props;
 
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <img src={picUrl} alt="" />
     </Wrapper>
   );

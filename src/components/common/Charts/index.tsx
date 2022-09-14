@@ -7,11 +7,12 @@ const Charts: React.FC<ChartType> = (props) => {
   const { title, style, eType, dataSet } = props;
   const domRef: MutableRefObject<any> = useRef();
   var myChart: any;
+  console.log("refresh");
 
   const chartBarOrLineInit = () => {
-    // 判断是否实例化
-    myChart = echarts.getInstanceByDom(domRef.current);
     // 基于准备好的dom，初始化echarts实例
+    myChart = echarts.getInstanceByDom(domRef.current);
+    // 判断是否实例化
     if (!myChart) {
       myChart = echarts.init(domRef.current);
     }
@@ -69,10 +70,10 @@ const Charts: React.FC<ChartType> = (props) => {
         chartPieInit();
         break;
     }
-  });
+  }, [eType]);
 
   return (
-    <Wrapper >
+    <Wrapper {...props}>
       {/* 准备一个挂载节点 */}
       <div ref={domRef} style={style}></div>
     </Wrapper>

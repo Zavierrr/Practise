@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { px2rem } from "@/assets/global-style";
 
 export const Wrapper = styled.div`
-  flex: 4;
+  width: 600px;
   padding: ${px2rem(10)} 0 ${px2rem(20)};
   .middle-top {
     display: flex;

@@ -23,7 +23,6 @@ const Left: React.FC<LeftPropsType> = (props) => {
   const { changeDataListDispatch, getDataListDispatch, changeTypeDispatch } =
     props;
   const addText = () => {
-    console.log(type, "1");
     changeDataListDispatch({
       id: dataList.length,
       type: "text",
@@ -42,11 +41,8 @@ const Left: React.FC<LeftPropsType> = (props) => {
         },
       },
     });
-    changeTypeDispatch("text");
-    console.log(type, "2");
   };
   const addPicture = () => {
-    changeTypeDispatch("picture");
     changeDataListDispatch({
       id: dataList.length,
       type: "picture",
@@ -65,10 +61,8 @@ const Left: React.FC<LeftPropsType> = (props) => {
         },
       },
     });
-    console.log(type);
   };
   const addChart = () => {
-    changeTypeDispatch("chart");
     changeDataListDispatch({
       id: dataList.length,
       type: "chart",
@@ -126,4 +120,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Left));
+export default connect(mapStateToProps, mapDispatchToProps)(Left);

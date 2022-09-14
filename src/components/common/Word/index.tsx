@@ -1,8 +1,8 @@
 import * as echarts from "echarts";
-import { useEffect } from "react";
+import { HTMLAttributes, useEffect } from "react";
 import { Wrapper } from "./style";
 
-interface WordPropsType {
+interface WordPropsType extends HTMLAttributes<HTMLDivElement> {
   title: string;
   content: string;
 }
@@ -11,7 +11,7 @@ const Word: React.FC<WordPropsType> = (props) => {
   const { title, content } = props;
 
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <span>{title}</span>
       <span>{content}</span>
     </Wrapper>

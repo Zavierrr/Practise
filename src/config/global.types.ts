@@ -1,8 +1,11 @@
+import { HTMLAttributes } from "react";
+
 // 图表样式数据类型
 export interface ChartStyleType {
   width: string;
   height: string;
   margin: string;
+  outline: string;
 }
 
 // 文本数据类型
@@ -27,7 +30,7 @@ export interface DataListType {
 }
 
 // 图表数据类型
-export interface ChartType {
+export interface ChartType extends HTMLAttributes<HTMLDivElement> {
   title: string;
   eType: string;
   dataSet: DataSet;
@@ -38,4 +41,9 @@ export interface ChartType {
 export interface DataSet {
   dimensions: string[];
   source: object[];
+}
+
+export interface EditType {
+  id: number;
+  content: DataListType;
 }

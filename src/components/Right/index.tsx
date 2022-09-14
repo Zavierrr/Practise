@@ -3,24 +3,31 @@ import { Wrapper } from "./style";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { connect } from "react-redux";
-import { changeDataList } from "@/store/action-creators/total";
+import {
+  changeDataList,
+  editDataList,
+  getDataList,
+} from "@/store/action-creators/total";
 import { Dispatch } from "redux";
 import { rootState } from "@/store";
-import { DataListType, InitialChart } from "@/config/global.types";
+import { DataListType, EditType, InitialChart } from "@/config/global.types";
 import Charts from "../Common/Charts";
 
 interface RightPropsType {
   dataList: DataListType[];
   initialChartData: InitialChart;
   type: string;
+  id: number;
   changeDataListDispatch: (data: DataListType) => void;
+  editDataListDispatch: (data: EditType) => void;
+  getDataListDispatch: (data: DataListType[]) => void;
 }
 
 const Right: React.FC<RightPropsType> = (props) => {
-  const { dataList, initialChartData, type } = props;
-  const { changeDataListDispatch } = props;
-  const [val, setVal] = useState("");
-  useEffect(() => {}, []);
+  const { dataList, initialChartData, type, id } = props;
+  const { changeDataListDispatch, editDataListDispatch, getDataListDispatch } =
+    props;
+  const [val, setVal] = useState("123");
   const modules = {
     toolbar: {
       container: [
@@ -37,15 +44,76 @@ const Right: React.FC<RightPropsType> = (props) => {
     },
   };
 
-  function imageHandler() {}
-
-  const changeContent = (val: string) => {
-    console.log(val);
+  const textChange = (str: string) => {
+    editDataListDispatch({
+      id: id,
+      content: {
+        id: dataList[id].id,
+        type: "text",
+        text: {
+          title: "",
+          content: str,
+        },
+        picUrl: "",
+        chartData: {
+          title: "",
+          eType: "",
+          dataSet: {
+            dimensions: [],
+            source: [],
+          },
+        },
+      },
+    });
   };
 
   const valChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVal(e.target.value);
+    // e.target.value
+    editDataListDispatch({
+      id: id,
+      content: {
+        id: dataList[id].id,
+        type: "picture",
+        text: {
+          title: "",
+          content: "",
+        },
+        picUrl: e.target.value,
+        chartData: {
+          title: "",
+          eType: "",
+          dataSet: {
+            dimensions: [],
+            source: [],
+          },
+        },
+      },
+    });
   };
+  const typeChange = (eType: string) => {
+    editDataListDispatch({
+      id: id,
+      content: {
+        id: id,
+        type: "chart",
+        text: {
+          title: "",
+          content: "",
+        },
+        picUrl: "",
+        chartData: {
+          title: dataList[id].chartData.title,
+          eType: eType,
+          dataSet: dataList[id].chartData.dataSet,
+        },
+      },
+    });
+    // console.log("111", dataList);
+  };
+  useEffect(() => {
+    getDataListDispatch(dataList);
+    console.log("222");
+  }, [dataList]);
 
   return (
     <Wrapper type={type}>
@@ -63,7 +131,7 @@ const Right: React.FC<RightPropsType> = (props) => {
           theme="snow"
           placeholder="Please Input"
           modules={modules}
-          onChange={changeContent}
+          onChange={textChange}
         />
       </div>
 
@@ -75,7 +143,7 @@ const Right: React.FC<RightPropsType> = (props) => {
         <input
           type="text"
           id="pic-url"
-          value={val}
+          // value={}
           onChange={valChange}
           placeholder="请输入图片地址"
           required
@@ -85,22 +153,46 @@ const Right: React.FC<RightPropsType> = (props) => {
       {/* 图表选择 */}
       <div className="chart-edit">
         <Charts
+          onClick={() => {
+            typeChange("bar");
+          }}
           title={initialChartData.title}
           eType="bar"
           dataSet={initialChartData.dataSet}
-          style={{ width: "360px", height: "280px", margin: "0 auto" }}
+          style={{
+            outline: "",
+            width: "360px",
+            height: "280px",
+            margin: "0 auto",
+          }}
         />
         <Charts
+          onClick={() => {
+            typeChange("pie");
+          }}
           title={initialChartData.title}
           eType="pie"
           dataSet={initialChartData.dataSet}
-          style={{ width: "360px", height: "280px", margin: "0 auto" }}
+          style={{
+            outline: "",
+            width: "360px",
+            height: "280px",
+            margin: "0 auto",
+          }}
         />
         <Charts
+          onClick={() => {
+            typeChange("line");
+          }}
           title={initialChartData.title}
           eType="line"
           dataSet={initialChartData.dataSet}
-          style={{ width: "360px", height: "280px", margin: "0 auto" }}
+          style={{
+            outline: "",
+            width: "360px",
+            height: "280px",
+            margin: "0 auto",
+          }}
         />
       </div>
     </Wrapper>
@@ -111,12 +203,19 @@ const mapStateToProps = (state: rootState) => ({
   dataList: state.dataList,
   initialChartData: state.initialChartData,
   type: state.type,
+  id: state.id,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   changeDataListDispatch(data: DataListType) {
     dispatch(changeDataList(data));
   },
+  editDataListDispatch(data: EditType) {
+    dispatch(editDataList(data));
+  },
+  getDataListDispatch(data: DataListType[]) {
+    dispatch(getDataList(data));
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Right));
+export default connect(mapStateToProps, mapDispatchToProps)(Right);

@@ -1,10 +1,6 @@
 import React, { memo, useEffect } from "react";
 import { Wrapper } from "./style";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Charts from "@/components/Common/Charts";
-import Word from "@/components/Common/Word";
-import Picture from "@/components/Common/Picture";
 import { DataListType } from "@/config/global.types";
 import {
   DndContext,
@@ -24,24 +20,35 @@ import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
 } from "@dnd-kit/modifiers";
-import { CSS } from "@dnd-kit/utilities";
 import { isArrayBufferView } from "util/types";
+import ListItem from "../ListItem";
 
 interface ContentProps {
   dataList: DataListType[];
   type: string;
+  id: number;
   changeDataListDispatch: (data: DataListType) => void;
   getDataListDispatch: (data: DataListType[]) => void;
+  changeIdDispatch: (data: number) => void;
+  changeTypeDispatch: (data: string) => void;
 }
 
 const Content: React.FC<ContentProps> = (props) => {
-  const { dataList, type } = props;
-  const { changeDataListDispatch, getDataListDispatch } = props;
+  const { dataList, type, id } = props;
+  const {
+    changeDataListDispatch,
+    getDataListDispatch,
+    changeIdDispatch,
+    changeTypeDispatch,
+  } = props;
+
+  console.log("111", dataList);
+
   // 初始化触摸传感器
   const touchSensor = useSensor(TouchSensor, {
     // 按下保持100毫秒启动拖动，拖动公差为10px
     activationConstraint: {
-      delay: 100,
+      delay: 300,
       tolerance: 0,
     },
   });
@@ -50,7 +57,7 @@ const Content: React.FC<ContentProps> = (props) => {
   const mouseSensor = useSensor(MouseSensor, {
     // 按下保持300毫秒启动拖动，拖动公差为10px
     activationConstraint: {
-      delay: 100,
+      delay: 300,
       tolerance: 0,
     },
   });
@@ -66,13 +73,20 @@ const Content: React.FC<ContentProps> = (props) => {
       const newIndex = dataList.findIndex((item: any) => item.id === over.id);
       // 拖动位置后，使用arrayMove 将数组之间位置调换
       const newList = arrayMove(dataList, oldIndex, newIndex);
-      // 向父组件报告
+      // 更新列表
       getDataListDispatch(newList);
     }
   };
 
   const tabElement = dataList.map((item) => (
-    <ListItem type={type} item={item} key={item.id} />
+    <ListItem
+      id={id}
+      type={type}
+      item={item}
+      key={item.id}
+      changeIdDispatch={changeIdDispatch}
+      changeTypeDispatch={changeTypeDispatch}
+    />
   ));
 
   return (
@@ -97,65 +111,4 @@ const Content: React.FC<ContentProps> = (props) => {
   );
 };
 
-// 子组件
-interface ListItemProps {
-  item: DataListType;
-  type: string;
-}
-
-const ListItem: React.FC<ListItemProps> = (props) => {
-  const { item, type } = props;
-
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transition,
-    transform,
-    isDragging,
-  } = useSortable({ id: item.id });
-
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  const getComponentType = (type: string) => {
-    switch (type) {
-      case "text":
-        return (
-          <div onClick={() => {}}>
-            <Word title={item.text.title} content={item.text.content} />
-          </div>
-        );
-      case "picture":
-        return (
-          <div onClick={() => {}}>
-            <Picture picUrl={item.picUrl} />
-          </div>
-        );
-      case "chart":
-        return (
-          <div onClick={() => {}}>
-            <Charts
-              title={item.chartData.title}
-              eType={item.chartData.eType}
-              dataSet={item.chartData.dataSet}
-              style={{ width: "100%", height: "360px", margin: "0 auto" }}
-            />
-          </div>
-        );
-      default:
-        break;
-    }
-  };
-
-  return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-      {getComponentType(item.type)}
-    </div>
-  );
-};
-
-export default memo(Content);
+export default Content;

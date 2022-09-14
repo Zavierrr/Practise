@@ -1,23 +1,37 @@
 import React, { memo } from "react";
 import { Wrapper } from "./style";
-import Content from "./Content";
+import Content from "@/components/Common/Content";
 import { connect } from "react-redux";
 import { rootState } from "@/store";
 import { Dispatch } from "redux";
-import { changeDataList, getDataList } from "@/store/action-creators/total";
+import {
+  changeDataList,
+  changeId,
+  changeType,
+  getDataList,
+} from "@/store/action-creators/total";
 import { DataListType } from "@/config/global.types";
 import { type } from "os";
 
 interface MiddlePropsType {
   dataList: DataListType[];
   type: string;
+  id: number;
   changeDataListDispatch: (data: DataListType) => void;
   getDataListDispatch: (data: DataListType[]) => void;
+  changeIdDispatch: (data: number) => void;
+  changeTypeDispatch: (data: string) => void;
 }
 
 const Middle: React.FC<MiddlePropsType> = (props) => {
-  const { dataList,type } = props;
-  const { changeDataListDispatch, getDataListDispatch } = props;
+  const { dataList, type, id } = props;
+  const {
+    changeDataListDispatch,
+    getDataListDispatch,
+    changeIdDispatch,
+    changeTypeDispatch,
+  } = props;
+
 
   return (
     <Wrapper>
@@ -39,8 +53,11 @@ const Middle: React.FC<MiddlePropsType> = (props) => {
       <Content
         dataList={dataList}
         type={type}
+        id={id}
         changeDataListDispatch={changeDataListDispatch}
         getDataListDispatch={getDataListDispatch}
+        changeIdDispatch={changeIdDispatch}
+        changeTypeDispatch={changeTypeDispatch}
       />
     </Wrapper>
   );
@@ -49,6 +66,7 @@ const Middle: React.FC<MiddlePropsType> = (props) => {
 const mapStateToProps = (state: rootState) => ({
   dataList: state.dataList,
   type: state.type,
+  id: state.id,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -58,6 +76,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   getDataListDispatch(data: DataListType[]) {
     dispatch(getDataList(data));
   },
+  changeIdDispatch(data: number) {
+    dispatch(changeId(data));
+  },
+  changeTypeDispatch(data: string) {
+    dispatch(changeType(data));
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Middle));
+export default connect(mapStateToProps, mapDispatchToProps)(Middle);
