@@ -52,7 +52,7 @@ const initialState = {
       picUrl: "",
       chartData: {
         title: "主流框架的满意度",
-        eType: "bar",
+        eType: "pie",
         dataSet: {
           dimensions: ["frame", "like"],
           source: [
@@ -92,6 +92,10 @@ const dataListReducer = (state = initialState.dataList, action: AnyAction) => {
     case actionTypes.EDIT_DATA_LIST:
       state[action.data.id] = { ...action.data.content };
       return cloneDeep(state);
+    // 清空数据
+    case actionTypes.DELETE_DATA_LIST:
+      state = [];
+      return state;
     default:
       return state;
   }

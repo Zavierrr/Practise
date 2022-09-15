@@ -15,7 +15,7 @@ export const Wrapper = styled.div<{ type: string }>`
   }
   .text-edit {
     display: ${(props) =>
-      props.type === "text" ? "block" : props.type === "" ? "block" : "none"};
+      props.type === "text" ? "block" : props.type === "" ? "none" : "none"};
   }
   .pic-edit {
     width: 100%;

@@ -25,9 +25,7 @@ interface RightPropsType {
 
 const Right: React.FC<RightPropsType> = (props) => {
   const { dataList, initialChartData, type, id } = props;
-  const { changeDataListDispatch, editDataListDispatch, getDataListDispatch } =
-    props;
-  const [val, setVal] = useState("123");
+  const { editDataListDispatch } = props;
   const modules = {
     toolbar: {
       container: [
@@ -43,16 +41,18 @@ const Right: React.FC<RightPropsType> = (props) => {
       ],
     },
   };
-
-  const textChange = (str: string) => {
+  // 修改标题
+  const textTitleChange = (str: any) => {
+    // 正则获取<p></p>中间内容，注意为空时特殊判断
+    str = str.match(/<p.*?>(.*?)(<br>)?<\/p>/)[1];
     editDataListDispatch({
       id: id,
       content: {
         id: dataList[id].id,
         type: "text",
         text: {
-          title: "",
-          content: str,
+          title: str || "标题一",
+          content: dataList[id].text.content,
         },
         picUrl: "",
         chartData: {
@@ -66,19 +66,20 @@ const Right: React.FC<RightPropsType> = (props) => {
       },
     });
   };
-
-  const valChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // e.target.value
+  // 修改内容
+  const textContentChange = (str: any) => {
+    // 正则获取<p></p>中间内容，注意为空时特殊判断
+    str = str.match(/<p.*?>(.*?)(<br>)?<\/p>/)[1];
     editDataListDispatch({
       id: id,
       content: {
         id: dataList[id].id,
-        type: "picture",
+        type: "text",
         text: {
-          title: "",
-          content: "",
+          title: dataList[id].text.title,
+          content: str || "内容区域",
         },
-        picUrl: e.target.value,
+        picUrl: "",
         chartData: {
           title: "",
           eType: "",
@@ -90,6 +91,32 @@ const Right: React.FC<RightPropsType> = (props) => {
       },
     });
   };
+  // 修改图片地址
+  const urlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    editDataListDispatch({
+      id: id,
+      content: {
+        id: dataList[id].id,
+        type: "picture",
+        text: {
+          title: "",
+          content: "",
+        },
+        picUrl:
+          e.target.value ||
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1665040940&t=16e2e59b65ff62a1177c05c01f672e94",
+        chartData: {
+          title: "",
+          eType: "",
+          dataSet: {
+            dimensions: [],
+            source: [],
+          },
+        },
+      },
+    });
+  };
+  // 修改图表类型
   const typeChange = (eType: string) => {
     editDataListDispatch({
       id: id,
@@ -108,12 +135,7 @@ const Right: React.FC<RightPropsType> = (props) => {
         },
       },
     });
-    // console.log("111", dataList);
   };
-  useEffect(() => {
-    getDataListDispatch(dataList);
-    console.log("222");
-  }, [dataList]);
 
   return (
     <Wrapper type={type}>
@@ -122,16 +144,24 @@ const Right: React.FC<RightPropsType> = (props) => {
           ? "图表编辑（切换类型）"
           : type === "picture"
           ? "图片编辑"
-          : "文本编辑"}
+          : type === "text"
+          ? "文本编辑"
+          : "待编辑"}
       </div>
 
       {/* 文本编辑 */}
       <div className="text-edit">
         <ReactQuill
           theme="snow"
-          placeholder="Please Input"
+          placeholder="请输入标题"
           modules={modules}
-          onChange={textChange}
+          onChange={textTitleChange}
+        />
+        <ReactQuill
+          theme="snow"
+          placeholder="请输入内容"
+          modules={modules}
+          onChange={textContentChange}
         />
       </div>
 
@@ -144,7 +174,7 @@ const Right: React.FC<RightPropsType> = (props) => {
           type="text"
           id="pic-url"
           // value={}
-          onChange={valChange}
+          onChange={urlChange}
           placeholder="请输入图片地址"
           required
         />
@@ -160,7 +190,6 @@ const Right: React.FC<RightPropsType> = (props) => {
           eType="bar"
           dataSet={initialChartData.dataSet}
           style={{
-            outline: "",
             width: "360px",
             height: "280px",
             margin: "0 auto",
@@ -174,7 +203,6 @@ const Right: React.FC<RightPropsType> = (props) => {
           eType="pie"
           dataSet={initialChartData.dataSet}
           style={{
-            outline: "",
             width: "360px",
             height: "280px",
             margin: "0 auto",
@@ -188,7 +216,6 @@ const Right: React.FC<RightPropsType> = (props) => {
           eType="line"
           dataSet={initialChartData.dataSet}
           style={{
-            outline: "",
             width: "360px",
             height: "280px",
             margin: "0 auto",

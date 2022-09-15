@@ -42,8 +42,6 @@ const Content: React.FC<ContentProps> = (props) => {
     changeTypeDispatch,
   } = props;
 
-  console.log("111", dataList);
-
   // 初始化触摸传感器
   const touchSensor = useSensor(TouchSensor, {
     // 按下保持100毫秒启动拖动，拖动公差为10px

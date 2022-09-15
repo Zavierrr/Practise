@@ -5,4 +5,5 @@
 .App{
   display: flex;
   width: 1280px;
+  position: relative;
 }

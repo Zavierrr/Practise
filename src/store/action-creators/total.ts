@@ -41,3 +41,9 @@ export const editDataList = (data: EditType): AnyAction => {
     data,
   };
 };
+// 删除数据
+export const deleteDataList = (): AnyAction => {
+  return {
+    type: ActionTypes.DELETE_DATA_LIST,
+  };
+};

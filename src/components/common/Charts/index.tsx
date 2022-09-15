@@ -2,12 +2,12 @@ import * as echarts from "echarts";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { ChartType } from "@/config/global.types";
 import { Wrapper } from "./style";
+import { type } from "os";
 
 const Charts: React.FC<ChartType> = (props) => {
   const { title, style, eType, dataSet } = props;
-  const domRef: MutableRefObject<any> = useRef();
+  var domRef: MutableRefObject<any> = useRef();
   var myChart: any;
-  console.log("refresh");
 
   const chartBarOrLineInit = () => {
     // 基于准备好的dom，初始化echarts实例
@@ -22,12 +22,9 @@ const Charts: React.FC<ChartType> = (props) => {
         text: title,
       },
       tooltip: {},
-      xAxis: { type: "category" },
-      yAxis: {},
-      dataset: {
-        dimensions: dataSet.dimensions,
-        source: dataSet.source,
-      },
+      xAxis: { type: "category", show: true },
+      yAxis: { show: true },
+      dataset: dataSet,
       series: [
         {
           type: eType,
@@ -49,6 +46,8 @@ const Charts: React.FC<ChartType> = (props) => {
       title: {
         text: title,
       },
+      // 解决饼图出现横轴bug
+      xAxis: { show: false },
       dataset: dataSet,
       series: [
         {
@@ -59,16 +58,11 @@ const Charts: React.FC<ChartType> = (props) => {
   };
 
   useEffect(() => {
-    switch (eType) {
-      case "bar":
-        chartBarOrLineInit();
-        break;
-      case "line":
-        chartBarOrLineInit();
-        break;
-      case "pie":
-        chartPieInit();
-        break;
+    if (eType === "bar" || eType === "line") {
+      chartBarOrLineInit();
+    }
+    if (eType === "pie") {
+      chartPieInit();
     }
   }, [eType]);
 

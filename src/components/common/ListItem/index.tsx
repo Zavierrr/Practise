@@ -9,10 +9,10 @@ import Word from "../Word";
 // 子组件
 interface ListItemProps {
   item: DataListType;
-  type: string;
-  id: number;
-  changeIdDispatch: (data: number) => void;
-  changeTypeDispatch: (data: string) => void;
+  type?: string;
+  id?: number;
+  changeIdDispatch?: (data: number) => void;
+  changeTypeDispatch?: (data: string) => void;
 }
 
 const ListItem: React.FC<ListItemProps> = (props) => {
@@ -35,15 +35,13 @@ const ListItem: React.FC<ListItemProps> = (props) => {
   };
 
   const getComponentType = () => {
-    console.log(item.chartData.eType, "===");
-
     switch (item.type) {
       case "text":
         return (
           <Word
             onClick={() => {
-              changeTypeDispatch("text");
-              changeIdDispatch(item.id);
+              changeTypeDispatch?.("text");
+              changeIdDispatch?.(item.id);
             }}
             style={id === item.id ? { outline: "2px solid red" } : {}}
             title={item.text.title}
@@ -56,8 +54,8 @@ const ListItem: React.FC<ListItemProps> = (props) => {
             picUrl={item.picUrl}
             style={id === item.id ? { outline: "2px solid red" } : {}}
             onClick={() => {
-              changeTypeDispatch("picture");
-              changeIdDispatch(item.id);
+              changeTypeDispatch?.("picture");
+              changeIdDispatch?.(item.id);
             }}
           />
         );
@@ -65,8 +63,8 @@ const ListItem: React.FC<ListItemProps> = (props) => {
         return (
           <Charts
             onClick={() => {
-              changeTypeDispatch("chart");
-              changeIdDispatch(item.id);
+              changeTypeDispatch?.("chart");
+              changeIdDispatch?.(item.id);
             }}
             title={item.chartData.title}
             eType={item.chartData.eType}
