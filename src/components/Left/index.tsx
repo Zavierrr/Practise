@@ -5,7 +5,7 @@ import {
   changeType,
   getDataList,
 } from "@/store/action-creators/total";
-import React, { memo, useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { Wrapper } from "./style";
@@ -24,13 +24,9 @@ const Left: React.FC<LeftPropsType> = (props) => {
     props;
   const addText = () => {
     changeDataListDispatch({
-      id: dataList.length,
+      id: dataList.length.toString(),
       type: "text",
-      text: {
-        title: "标题一",
-        content:
-          "由各种物质组成的巨型球状天体，叫做星球，星球有一定的形状，有自己的质量以及体积吧啦吧啦吧啦吧啦",
-      },
+      text: "<p>标题一</p><p>由各种物质组成的巨型球状天体，叫做星球，星球有一定的形状，有自己的质量以及体积吧啦吧啦吧啦吧啦</p>",
       picUrl: "",
       chartData: {
         title: "",
@@ -44,12 +40,9 @@ const Left: React.FC<LeftPropsType> = (props) => {
   };
   const addPicture = () => {
     changeDataListDispatch({
-      id: dataList.length,
+      id: dataList.length.toString(),
       type: "picture",
-      text: {
-        title: "标题一",
-        content: "",
-      },
+      text: "",
       picUrl:
         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1665040940&t=16e2e59b65ff62a1177c05c01f672e94",
       chartData: {
@@ -64,12 +57,9 @@ const Left: React.FC<LeftPropsType> = (props) => {
   };
   const addChart = () => {
     changeDataListDispatch({
-      id: dataList.length,
+      id: dataList.length.toString(),
       type: "chart",
-      text: {
-        title: "",
-        content: "",
-      },
+      text: "",
       picUrl: "",
       chartData: {
         title: "主流框架的满意度",

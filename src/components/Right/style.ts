@@ -16,6 +16,15 @@ export const Wrapper = styled.div<{ type: string }>`
   .text-edit {
     display: ${(props) =>
       props.type === "text" ? "block" : props.type === "" ? "none" : "none"};
+    .button {
+      padding: ${px2rem(4)} ${px2rem(6)};
+      font-size: ${px2rem(10)};
+      background-color: #3682f7;
+      color: #fff;
+      margin: ${px2rem(6)} 42%;
+      width: ${px2rem(40)};
+      outline: none;
+    }
   }
   .pic-edit {
     width: 100%;

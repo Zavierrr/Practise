@@ -2,9 +2,6 @@ import styled from "styled-components";
 import { px2rem } from "@/assets/global-style";
 import { type } from "os";
 
-// export const Wrapper = styled.div<{ type: string }>`
-// outline: ${(props) => (props.type === "picture" ? "2px solid red" : "none")};
-
 export const Wrapper = styled.div`
   height: ${px2rem(200)};
   width: 100%;

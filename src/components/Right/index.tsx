@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import { connect } from "react-redux";
 import {
   changeDataList,
+  changeId,
   editDataList,
   getDataList,
 } from "@/store/action-creators/total";
@@ -12,6 +13,7 @@ import { Dispatch } from "redux";
 import { rootState } from "@/store";
 import { DataListType, EditType, InitialChart } from "@/config/global.types";
 import Charts from "../Common/Charts";
+import { Toast } from "antd-mobile";
 
 interface RightPropsType {
   dataList: DataListType[];
@@ -21,11 +23,19 @@ interface RightPropsType {
   changeDataListDispatch: (data: DataListType) => void;
   editDataListDispatch: (data: EditType) => void;
   getDataListDispatch: (data: DataListType[]) => void;
+  changeIdDispatch: (data: number) => void;
 }
 
 const Right: React.FC<RightPropsType> = (props) => {
   const { dataList, initialChartData, type, id } = props;
-  const { editDataListDispatch } = props;
+  const { editDataListDispatch, changeIdDispatch } = props;
+  const str = dataList[id]?.text;
+  const [value, setValue] = useState<string>(str);
+  // 监听数据变化，更新富文本数据
+  useEffect(() => {
+    setValue(str);
+  }, [str]);
+
   const modules = {
     toolbar: {
       container: [
@@ -41,19 +51,16 @@ const Right: React.FC<RightPropsType> = (props) => {
       ],
     },
   };
-  // 修改标题
-  const textTitleChange = (str: any) => {
+  // 修改文本
+  const textDataChange = () => {
     // 正则获取<p></p>中间内容，注意为空时特殊判断
-    str = str.match(/<p.*?>(.*?)(<br>)?<\/p>/)[1];
+    // str = str.match(/<p.*?>(.*?)(<br>)?<\/p>/)[1];
     editDataListDispatch({
       id: id,
       content: {
         id: dataList[id].id,
         type: "text",
-        text: {
-          title: str || "标题一",
-          content: dataList[id].text.content,
-        },
+        text: value,
         picUrl: "",
         chartData: {
           title: "",
@@ -64,32 +71,17 @@ const Right: React.FC<RightPropsType> = (props) => {
           },
         },
       },
+    });
+    Toast.show({
+      content: "保存成功",
+      icon: "success",
+      position: "top",
+      duration: 800,
     });
   };
-  // 修改内容
-  const textContentChange = (str: any) => {
-    // 正则获取<p></p>中间内容，注意为空时特殊判断
-    str = str.match(/<p.*?>(.*?)(<br>)?<\/p>/)[1];
-    editDataListDispatch({
-      id: id,
-      content: {
-        id: dataList[id].id,
-        type: "text",
-        text: {
-          title: dataList[id].text.title,
-          content: str || "内容区域",
-        },
-        picUrl: "",
-        chartData: {
-          title: "",
-          eType: "",
-          dataSet: {
-            dimensions: [],
-            source: [],
-          },
-        },
-      },
-    });
+  // 将数据缓存到value
+  const changeText = (text: string) => {
+    setValue(text);
   };
   // 修改图片地址
   const urlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,10 +90,7 @@ const Right: React.FC<RightPropsType> = (props) => {
       content: {
         id: dataList[id].id,
         type: "picture",
-        text: {
-          title: "",
-          content: "",
-        },
+        text: "",
         picUrl:
           e.target.value ||
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1665040940&t=16e2e59b65ff62a1177c05c01f672e94",
@@ -121,12 +110,9 @@ const Right: React.FC<RightPropsType> = (props) => {
     editDataListDispatch({
       id: id,
       content: {
-        id: id,
+        id: dataList[id].id,
         type: "chart",
-        text: {
-          title: "",
-          content: "",
-        },
+        text: "",
         picUrl: "",
         chartData: {
           title: dataList[id].chartData.title,
@@ -153,16 +139,15 @@ const Right: React.FC<RightPropsType> = (props) => {
       <div className="text-edit">
         <ReactQuill
           theme="snow"
-          placeholder="请输入标题"
-          modules={modules}
-          onChange={textTitleChange}
-        />
-        <ReactQuill
-          theme="snow"
           placeholder="请输入内容"
           modules={modules}
-          onChange={textContentChange}
+          value={value}
+          onChange={changeText}
+          style={{fontSize:'30px'}}
         />
+        <button className="button" onClick={textDataChange}>
+          保存
+        </button>
       </div>
 
       {/* 图片地址编辑 */}
@@ -173,7 +158,6 @@ const Right: React.FC<RightPropsType> = (props) => {
         <input
           type="text"
           id="pic-url"
-          // value={}
           onChange={urlChange}
           placeholder="请输入图片地址"
           required
@@ -242,6 +226,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
   getDataListDispatch(data: DataListType[]) {
     dispatch(getDataList(data));
+  },
+  changeIdDispatch(data: number) {
+    dispatch(changeId(data));
   },
 });
 

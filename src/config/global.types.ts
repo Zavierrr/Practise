@@ -1,11 +1,5 @@
 import { HTMLAttributes } from "react";
 
-// 文本数据类型
-export interface TextObjectType {
-  title: string;
-  content: string;
-}
-
 // 初始化图表数据类型
 export interface InitialChart {
   title: string;
@@ -14,9 +8,9 @@ export interface InitialChart {
 
 // 总数据类型
 export interface DataListType {
-  id: number;
+  id: string;
   type: string;
-  text: TextObjectType;
+  text: string;
   picUrl: string;
   chartData: ChartType;
 }

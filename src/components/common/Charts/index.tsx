@@ -2,7 +2,6 @@ import * as echarts from "echarts";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { ChartType } from "@/config/global.types";
 import { Wrapper } from "./style";
-import { type } from "os";
 
 const Charts: React.FC<ChartType> = (props) => {
   const { title, style, eType, dataSet } = props;

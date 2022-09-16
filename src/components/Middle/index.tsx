@@ -12,9 +12,8 @@ import {
   getDataList,
 } from "@/store/action-creators/total";
 import { DataListType } from "@/config/global.types";
-// import { Button, Modal } from "antd";
-// import { type } from "os";
 import Modal from "../Common/Modal";
+import { Toast } from "antd-mobile";
 
 interface MiddlePropsType {
   dataList: DataListType[];
@@ -38,18 +37,36 @@ const Middle: React.FC<MiddlePropsType> = (props) => {
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 展示modal
   const showModal = () => {
     setIsModalOpen(true);
   };
 
+  // 清空数据
   const detele = () => {
     deleteDataListDispatch();
     changeTypeDispatch("");
     changeIdDispatch(-1);
   };
 
+  //保存数据
   const saveDataList = () => {
-    window.localStorage.setItem("data_list", JSON.stringify(dataList));
+    if (dataList.length > 0) {
+      window.localStorage.setItem("data_list", JSON.stringify(dataList));
+      Toast.show({
+        content: "保存成功",
+        icon: "success",
+        position: "top",
+        duration: 800,
+      });
+    } else {
+      Toast.show({
+        content: "数据为空",
+        icon: "fail",
+        position: "top",
+        duration: 800,
+      });
+    }
   };
 
   return (
@@ -82,10 +99,6 @@ const Middle: React.FC<MiddlePropsType> = (props) => {
         open={isModalOpen}
         dataList={dataList}
         setOpen={setIsModalOpen}
-        id={id}
-        type={type}
-        changeIdDispatch={changeIdDispatch}
-        changeTypeDispatch={changeTypeDispatch}
       />
     </Wrapper>
   );

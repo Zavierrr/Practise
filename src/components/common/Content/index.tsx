@@ -14,14 +14,13 @@ import {
   arrayMove,
   SortableContext,
   verticalListSortingStrategy,
-  useSortable,
 } from "@dnd-kit/sortable";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
 } from "@dnd-kit/modifiers";
-import { isArrayBufferView } from "util/types";
 import ListItem from "../ListItem";
+import { DragEndEvent } from "@dnd-kit/core/dist/types";
 
 interface ContentProps {
   dataList: DataListType[];
@@ -35,19 +34,13 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = (props) => {
   const { dataList, type, id } = props;
-  const {
-    changeDataListDispatch,
-    getDataListDispatch,
-    changeIdDispatch,
-    changeTypeDispatch,
-  } = props;
+  const { getDataListDispatch, changeIdDispatch, changeTypeDispatch } = props;
 
   // 初始化触摸传感器
   const touchSensor = useSensor(TouchSensor, {
     // 按下保持100毫秒启动拖动，拖动公差为10px
     activationConstraint: {
-      delay: 300,
-      tolerance: 0,
+      distance: 5,
     },
   });
 
@@ -55,33 +48,37 @@ const Content: React.FC<ContentProps> = (props) => {
   const mouseSensor = useSensor(MouseSensor, {
     // 按下保持300毫秒启动拖动，拖动公差为10px
     activationConstraint: {
-      delay: 300,
-      tolerance: 0,
+      distance: 5,
     },
   });
 
   // 使用mouse和touch传感器
   const sensors = useSensors(touchSensor, mouseSensor);
 
-  const handleDragEnd = ({ active, over }: { active: any; over: any }) => {
+  const handleDragEnd = ({ active, over, delta }: DragEndEvent) => {
     // active 当前拖拽元素及其data
     // over 碰撞元素data
-    if (active.id !== over.id) {
+    console.log(active.id, over?.id, delta);
+
+    if (active.id !== over?.id) {
       const oldIndex = dataList.findIndex((item: any) => item.id === active.id);
-      const newIndex = dataList.findIndex((item: any) => item.id === over.id);
+      const newIndex = dataList.findIndex((item: any) => item.id === over?.id);
       // 拖动位置后，使用arrayMove 将数组之间位置调换
       const newList = arrayMove(dataList, oldIndex, newIndex);
+      // 顺序会改变，重新选中需要编辑的组件
+      changeTypeDispatch("");
       // 更新列表
       getDataListDispatch(newList);
     }
   };
 
-  const tabElement = dataList.map((item) => (
+  const tabElement = dataList.map((item, index) => (
     <ListItem
       id={id}
       type={type}
       item={item}
-      key={item.id}
+      index={index}
+      key={index}
       changeIdDispatch={changeIdDispatch}
       changeTypeDispatch={changeTypeDispatch}
     />
@@ -99,7 +96,7 @@ const Content: React.FC<ContentProps> = (props) => {
         modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
       >
         <SortableContext
-          items={dataList.map((item) => item.id)}
+          items={dataList}
           strategy={verticalListSortingStrategy}
         >
           {tabElement}
