@@ -5,7 +5,7 @@ import { cloneDeep } from "lodash";
 const initialState = {
   type: "text",
   id: 0,
-  dataList: [
+  dataList: JSON.parse(window.localStorage.getItem("data_list")) || [
     {
       id: "0",
       type: "text",
