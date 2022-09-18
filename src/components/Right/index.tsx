@@ -143,7 +143,7 @@ const Right: React.FC<RightPropsType> = (props) => {
           modules={modules}
           value={value}
           onChange={changeText}
-          style={{fontSize:'30px'}}
+          style={{ fontSize: "30px" }}
         />
         <button className="button" onClick={textDataChange}>
           保存
